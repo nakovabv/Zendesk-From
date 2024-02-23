@@ -39,13 +39,11 @@ const uploadAttachmentAndGetToken = async (attachment) => {
 };
 
 // Use CSS Style
-app.use("/",express.static(__dirname + "/"));
-
+app.use("/", express.static(__dirname + "/"));
 
 // Use body-parser middleware to parse URL-encoded data
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 // Render the form with reCAPTCHA
 app.get("/", (req, res) => {
@@ -80,83 +78,86 @@ app.get("/", recaptcha.middleware.render, (req, res) => {
 */
 
 // Handle form submission
-app.post("/submit", recaptcha.middleware.verify, async (req, res) => {
-  console.log(req.recaptcha);
-  if (!req.recaptcha.error) {
-    // If reCAPTCHA verification is successful
-    try {
-      const form = new formidable.IncomingForm();
-      form.options.allowEmptyFiles = true; // Allow files with size 0
-      form.options.minFileSize = 0; // Allow files with size 0
-      form.parse(req, async (err, fields, files) => {
-        console.log(fields);
-        if (err) {
-          // Handle form parsing error
-          console.error("Error parsing form:", err);
-          res.status(500).send("Error");
-          return;
-        }
+app.post("/submit", async (req, res) => {
+  recaptcha.verify(req, function (error, data) {
+    console.log(error);
+    console.log(data);
+    if (!error) {
+      // If reCAPTCHA verification is successful
+      try {
+        const form = new formidable.IncomingForm();
+        form.options.allowEmptyFiles = true; // Allow files with size 0
+        form.options.minFileSize = 0; // Allow files with size 0
+        form.parse(req, async (err, fields, files) => {
+          console.log(fields);
+          if (err) {
+            // Handle form parsing error
+            console.error("Error parsing form:", err);
+            res.status(500).send("Error");
+            return;
+          }
 
-        let formData = {
-          request: {
-            subject: fields.subject[0],
-            comment: {
-              body: `New support ticket from ${fields.name[0]}
+          let formData = {
+            request: {
+              subject: fields.subject[0],
+              comment: {
+                body: `New support ticket from ${fields.name[0]}
                     Contact phone number: ${fields.phone[0]}
                     Order number: ${fields.order[0]}
                     Product SKU: ${fields.sku[0]}
                     Description:  ${fields.description[0]}`,
+              },
+              requester: {
+                name: fields.name[0],
+                email: fields.email[0],
+              },
             },
-            requester: {
-              name: fields.name[0],
-              email: fields.email[0],
+          };
+
+          if (files.attachment.length) {
+            // Check if multiple files are uploaded
+            const attachmentTokens = await Promise.all(
+              files.attachment.map(async (file) => {
+                if (file.size !== 0) {
+                  return uploadAttachmentAndGetToken(file); // Upload each file and get token
+                }
+              })
+            );
+
+            formData.request.comment.uploads = attachmentTokens.filter(Boolean); // Filter out undefined values
+          } else if (files.attachment.size !== 0) {
+            // Single file scenario
+            const attachmentToken = await uploadAttachmentAndGetToken(
+              files.attachment
+            );
+            formData.request.comment.uploads = [attachmentToken];
+          }
+
+          const options = {
+            method: "post",
+            url: `https://${process.env.ZENDESK_SUBDOMAIN}.zendesk.com/api/v2/requests.json`,
+            headers: {
+              "Content-Type": "application/json",
             },
-          },
-        };
+            auth: {
+              username: process.env.ZENDESK_EMAIL,
+              password: process.env.ZENDESK_PASSWORD,
+            },
+            data: JSON.stringify(formData), // Convert form data to JSON string
+          };
 
-        if (files.attachment.length) {
-          // Check if multiple files are uploaded
-          const attachmentTokens = await Promise.all(
-            files.attachment.map(async (file) => {
-              if (file.size !== 0) {
-                return uploadAttachmentAndGetToken(file); // Upload each file and get token
-              }
-            })
-          );
-
-          formData.request.comment.uploads = attachmentTokens.filter(Boolean); // Filter out undefined values
-        } else if (files.attachment.size !== 0) {
-          // Single file scenario
-          const attachmentToken = await uploadAttachmentAndGetToken(
-            files.attachment
-          );
-          formData.request.comment.uploads = [attachmentToken];
-        }
-
-        const options = {
-          method: "post",
-          url: `https://${process.env.ZENDESK_SUBDOMAIN}.zendesk.com/api/v2/requests.json`,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          auth: {
-            username: process.env.ZENDESK_EMAIL,
-            password: process.env.ZENDESK_PASSWORD,
-          },
-          data: JSON.stringify(formData), // Convert form data to JSON string
-        };
-
-        await axios(options); // Send request to Zendesk API
-        res.status(200).send("Form submitted successfully");
-      });
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      res.status(500).send("Error");
+          await axios(options); // Send request to Zendesk API
+          res.status(200).send("Form submitted successfully");
+        });
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        res.status(500).send("Error");
+      }
+    } else {
+      // If reCAPTCHA verification fails
+      res.status(400).send("reCAPTCHA verification failed");
     }
-  } else {
-    // If reCAPTCHA verification fails
-    res.status(400).send("reCAPTCHA verification failed");
-  }
+  });
 });
 
 // Start the server
