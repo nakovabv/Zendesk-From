@@ -50,32 +50,32 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-/*
 app.get("/", recaptcha.middleware.render, (req, res) => {
   const form = `
-    <form action="/submit" method="post" enctype="multipart/form-data">
-    <div>
-        <input type="text" name="subject" placeholder="Subject*" required><br>
-        <input type="text" name="name" placeholder="Your Name*" required><br>
-        <input type="email" name="email" placeholder="Your Email*" required><br>
-        <input type="text" name="phone" placeholder="Contact Phone Number*" required><br>
-        <input type="text" name="order" placeholder="Order Number*" required><br>
-        <input type="text" name="sku" placeholder="Product SKU*" required><br>
-        <textarea name="description" rows="6" placeholder="Your Message*" required></textarea><br>
-        <label for="attachment">File Upload</label><br>
-        <input type="file" name="attachment" accept="image/*" multiple><br><br>
-    </div>
-    <div>
-        ${recaptcha.render()} <!-- Render reCAPTCHA widget -->
-    </div>
-    <div>
-        <button>Submit</button>
-    </div>
+    <form id="supportForm" action="/submit" method="post" enctype="multipart/form-data" style="width: 100%; max-width: max-content;">
+        <div>
+            <input class="form-control contact-form" type="text" name="subject" placeholder="Subject*" required>
+            <input class="form-control contact-form" type="text" name="name" placeholder="Your Name*" required>
+            <input class="form-control contact-form" type="email" name="email" placeholder="Your Email*" required>
+            <input class="form-control contact-form" type="text" name="phone" placeholder="Contact Phone Number*"
+                required>
+            <input class="form-control contact-form" type="text" name="order" placeholder="Order Number*" required>
+            <input class="form-control contact-form" type="text" name="sku" placeholder="Product SKU*" required>
+            <textarea class="form-control contact-form" name="description" rows="6" placeholder="Your Message*"
+                required></textarea>
+            <label style="font-weight: 600;" for="attachment">File Upload</label>
+            <input type="file" name="attachment" accept="image/*" multiple>
+        </div>
+        <div class="g-recaptcha" data-sitekey="6Lcie30pAAAAAH7nq9IRGrA5-JTNm0gD7YXxYxdI"></div>
+        <!-- Replace with your reCAPTCHA site key -->
+        <div>
+            <button class="btn btn-lg btn-default btn-contact-form" type="submit">Send Support Ticket</button>
+        </div>
     </form>
     `;
   res.send(form);
 });
-*/
+
 
 // Handle form submission
 app.post("/submit", recaptcha.middleware.verify, async (req, res) => {
