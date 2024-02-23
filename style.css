@@ -12,13 +12,6 @@ label {
   margin-bottom: 10px;
 }
 
-input::placeholder,
-textarea::placeholder {
-  font-weight: bold;
-  opacity: 0.5;
-  color: #000000;
-}
-
 input[type="text"],
 input[type="email"],
 input[type="file"],
@@ -48,27 +41,38 @@ input.form-control.contact-form {
   height: 38px;
   border: 1px solid #231f20;
   border-radius: 6px;
+  font-size: 14px;
 }
 
 textarea.form-control.contact-form {
   height: auto;
   border: 1px solid #231f20;
   border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  color: #495057;
+  background-color: #fff;
+  border-color: #6d6348;
+  outline: 0;
 }
 
 input.form-control.contact-form::placeholder,
 textarea.form-control.contact-form::placeholder {
-    font-size: 18px !important;
-    font-weight: 600 !important;
-    color: darkgrey !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: darkgrey !important;
 }
 
 button.btn.btn-lg.btn-default.btn-contact-form {
   background-color: #a81d4d;
   color: white;
-  padding: 10px 55px;
+  padding: 15px 55px;
   border-radius: 6px;
   font-size: 21px;
-  font-weight: 500;
+  font-weight: 400;
   margin: 16px auto;
 }
