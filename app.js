@@ -52,6 +52,91 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", recaptcha.middleware.render, (req, res) => {
   const form = `
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+  }
+
+  form {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="file"],
+  textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  input.form-control.contact-form {
+    height: 38px;
+    border: 1px solid #231f20;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    padding: 6px 12px;
+  }
+
+  textarea.form-control.contact-form {
+    height: auto;
+    border: 1px solid #231f20;
+    border-radius: 6px;
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .form-control:focus {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    color: #495057;
+    background-color: #fff;
+    border-color: #6d6348;
+    outline: 0;
+  }
+
+  input.form-control.contact-form::placeholder,
+  textarea.form-control.contact-form::placeholder {
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    color: darkgrey !important;
+  }
+
+  button.btn.btn-lg.btn-default.btn-contact-form {
+    background-color: #a81d4d;
+    color: white;
+    padding: 15px 55px;
+    border-radius: 6px;
+    font-size: 21px;
+    font-weight: 400;
+    margin: 16px auto;
+  }
+
+  </style>
     <form id="supportForm" action="/submit" method="post" enctype="multipart/form-data" style="width: 100%; max-width: max-content;">
         <div>
             <input class="form-control contact-form" type="text" name="subject" placeholder="Subject*" required>
