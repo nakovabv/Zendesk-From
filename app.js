@@ -46,9 +46,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // Render the form with reCAPTCHA
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(__dirname + "/index.html");
+// });
 
 app.get("/", recaptcha.middleware.render, (req, res) => {
   const form = `
@@ -66,9 +66,9 @@ app.get("/", recaptcha.middleware.render, (req, res) => {
             <label style="font-weight: 600;" for="attachment">File Upload</label>
             <input type="file" name="attachment" accept="image/*" multiple>
         </div>
-        <div class="g-recaptcha" data-sitekey="6Lcie30pAAAAAH7nq9IRGrA5-JTNm0gD7YXxYxdI"></div>
-        <!-- Replace with your reCAPTCHA site key -->
         <div>
+        ${recaptcha.render()} <!-- Render reCAPTCHA widget -->
+        </div>
             <button class="btn btn-lg btn-default btn-contact-form" type="submit">Send Support Ticket</button>
         </div>
     </form>
