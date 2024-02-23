@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Form</title>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+</head>
+
+<body>
+    <form id="supportForm" action="/submit" method="post" enctype="multipart/form-data">
+        <div>
+            <input class="form-control contact-form" type="text" name="subject" placeholder="Subject*" required>
+            <input class="form-control contact-form" type="text" name="name" placeholder="Your Name*" required>
+            <input class="form-control contact-form" type="email" name="email" placeholder="Your Email*" required>
+            <input class="form-control contact-form" type="text" name="phone" placeholder="Contact Phone Number*"
+                required>
+            <input class="form-control contact-form" type="text" name="order" placeholder="Order Number*" required>
+            <input class="form-control contact-form" type="text" name="sku" placeholder="Product SKU*" required>
+            <textarea class="form-control contact-form" name="description" rows="6" placeholder="Your Message*"
+                required></textarea>
+            <label style="font-weight: 600;" for="attachment">File Upload</label>
+            <input type="file" name="attachment" accept="image/*" multiple>
+        </div>
+        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+        <!-- Replace with your reCAPTCHA site key -->
+        <div>
+            <button class="btn btn-lg btn-default btn-contact-form" type="submit">Send Support TIcket</button>
+        </div>
+    </form>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</body>
+
+</html>
