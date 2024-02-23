@@ -45,7 +45,7 @@ button:hover {
 }
 
 input.form-control.contact-form {
-  height: calc(2em + 0.5rem + 2px);
+  height: 38px;
   border: 1px solid #231f20;
   border-radius: 6px;
 }
@@ -54,6 +54,13 @@ textarea.form-control.contact-form {
   height: auto;
   border: 1px solid #231f20;
   border-radius: 6px;
+}
+
+input.form-control.contact-form::placeholder,
+textarea.form-control.contact-form::placeholder {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: darkgrey !important;
 }
 
 button.btn.btn-lg.btn-default.btn-contact-form {
