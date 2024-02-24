@@ -67,7 +67,7 @@ app.post("/submit", async (req, res) => {
       console.log(response.data);
       if (!success) {
         // reCAPTCHA validation failed
-        return res.status(400).send("reCAPTCHA validation failed");
+        return res.status(400).send("reCAPTCHA validation failed. Refresh the page and try again.");
       }
 
       let formData = {
@@ -120,11 +120,11 @@ app.post("/submit", async (req, res) => {
       };
 
       await axios(options); // Send request to Zendesk API
-      res.status(200).send("Form submitted successfully");
+      res.status(200).send("Your Ticket has been received. We will respond to you shortly.");
     });
   } catch (error) {
     console.error("Error submitting form:", error);
-    res.status(500).send("Error");
+    res.status(500).send("Error. Refresh the page and try again.");
   }
 });
 
