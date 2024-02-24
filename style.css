@@ -65,7 +65,7 @@ textarea.form-control.contact-form {
 
 input.form-control.contact-form::placeholder,
 textarea.form-control.contact-form::placeholder {
-  font-size: 18px !important;
+  font-size: 16px !important;
   font-weight: 500 !important;
   color: darkgrey !important;
 }
