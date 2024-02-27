@@ -30,6 +30,18 @@
             <button class="btn btn-lg btn-default btn-contact-form" type="submit">Send Support Ticket</button>
         </div>
     </form>
+    <script>
+        // Function to send message to parent
+        function sendMessageToParent() {
+            windows.top.postMessage('Hello OZY Toolbox!', 'https://www.ozytoolbox.com.au');
+        }
+
+        // Listen for messages from the parent
+        window.addEventListener('message', function(event) {
+            if (event.origin !== 'https://www.ozytoolbox.com.au') return;
+                console.log('Message from parent:', event.data);
+        });
+    </script>
 </body>
 
 </html>
